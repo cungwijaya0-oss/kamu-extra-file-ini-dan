@@ -1,0 +1,21 @@
+{
+  "overview": "KLIPPER AI PRO turns a YouTube link into ready-to-post short-video plans: it pulls the real transcript, uses AI to pick the best moments with exact timestamps, and writes titles, captions and hashtags for each clip.",
+  "features": [
+    "Paste a YouTube link and choose max clip duration, aspect ratio and subtitles",
+    "Fetch the video's real transcript and metadata",
+    "AI selects the best moments with exact start and end timestamps",
+    "AI writes an attractive title, caption and hashtags for each clip",
+    "Live progress bar with named processing stages",
+    "Saved plan library with unique names, copy and download",
+    "Modern dark purple-pink gradient design"
+  ],
+  "category": "productivity",
+  "tags": [
+    "video",
+    "ai",
+    "youtube",
+    "content-creation",
+    "social-media"
+  ],
+  "last_updated": "2026-10-08T11:57:16.140Z"
+}

@@ -1,0 +1,146 @@
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec HttpHeader;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: HttpRequestResult;
+ };
+type Timestamp = int;
+type Result__1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type PlanId = nat;
+type PlanError = 
+ variant {
+   aiFailure: text;
+   invalidUrl: text;
+   noCaptions: text;
+   unreachable: text;
+ };
+type HttpRequestResult = 
+ record {
+   body: blob;
+   headers: vec HttpHeader;
+   status: nat;
+ };
+type HttpHeader = 
+ record {
+   name: text;
+   value: text;
+ };
+type GeneratePlanResult = 
+ variant {
+   err: PlanError;
+   ok: ClipPlan;
+ };
+type GeneratePlanRequest = 
+ record {
+   options: GenerateOptions;
+   url: text;
+ };
+type GenerateOptions = 
+ record {
+   aspectRatio: AspectRatio;
+   maxClipSeconds: nat;
+   subtitlesEnabled: bool;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type ClipPlan = 
+ record {
+   aspectRatio: AspectRatio;
+   channel: text;
+   clips: vec Clip;
+   createdAt: Timestamp;
+   durationSeconds: nat;
+   id: PlanId;
+   language: text;
+   maxClipSeconds: nat;
+   name: text;
+   owner: principal;
+   sourceTitle: text;
+   sourceUrl: text;
+   subtitlesEnabled: bool;
+ };
+type Clip = 
+ record {
+   caption: text;
+   endSeconds: nat;
+   hashtags: vec text;
+   index: nat;
+   startSeconds: nat;
+   title: text;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type AspectRatio = 
+ variant {
+   landscape;
+   portrait;
+   square;
+ };
+service : {
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result__1);
+  _internet_identity_sign_in_start: () -> (blob);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  deletePlan: (id: PlanId) -> (bool);
+  execute: (qJson: text) -> (Result) query;
+  generatePlan: (request: GeneratePlanRequest) -> (GeneratePlanResult);
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getPlan: (id: PlanId) -> (opt ClipPlan) query;
+  isCallerAdmin: () -> (bool) query;
+  listPlans: () -> (vec ClipPlan) query;
+  schema: () -> (text) query;
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+}
